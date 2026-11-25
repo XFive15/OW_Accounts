@@ -21,3 +21,8 @@ create policy "auth delete" on public.accounts for delete to authenticated using
 grant usage on schema public to authenticated;
 grant select, insert, update, delete on public.accounts to authenticated;
 grant all on public.accounts to service_role;
+
+-- 使用状态(已建过表的话,单独运行这一段即可)
+alter table public.accounts add column if not exists in_use boolean not null default false;
+alter table public.accounts add column if not exists in_use_by text;
+alter table public.accounts add column if not exists in_use_at timestamptz;

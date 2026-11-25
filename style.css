@@ -22,3 +22,7 @@ dialog{background:#181d27;color:inherit;border:1px solid #2a3140;border-radius:1
 dialog::backdrop{background:#000a}
 .row{display:flex;gap:8px;margin-top:8px}
 #msg{text-align:center;color:#ff7b7b}
+.status{display:flex;align-items:center;gap:8px;margin:8px 0}
+.badge{padding:3px 9px;border-radius:12px;font-size:.85rem;font-weight:600}
+.badge.free{background:#12351f;color:#5ee38b}
+.badge.busy{background:#3d1818;color:#ff8a8a}

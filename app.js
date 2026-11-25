@@ -37,7 +37,9 @@ async function boot() {
   const { data } = await sb.auth.getSession();
   if (data.session) afterLogin(); else show("loginView");
 }
+let me = "";
 function afterLogin() {
+  sb.auth.getUser().then(({ data }) => (me = (data.user?.email || "").split("@")[0]));
   $("bar").hidden = false;
   show("unlockView");
 }
@@ -81,6 +83,7 @@ function render() {
     el.className = "card";
     el.innerHTML = `
       <h3></h3><div class="tag"></div>
+      <div class="status"><span class="badge"></span><button class="sm" data-a="use"></button></div>
       <div class="ranks">
         <span>🛡 ${rankText(rk.tank)}</span><span>⚔ ${rankText(rk.damage)}</span><span>💚 ${rankText(rk.support)}</span>
       </div>
@@ -97,6 +100,10 @@ function render() {
       <div class="frame"></div>`;
     el.querySelector("h3").textContent = a.name;
     el.querySelector(".tag").textContent = a.battletag || "(未填 BattleTag)";
+    const badge = el.querySelector(".badge"), useBtn = el.querySelector('[data-a="use"]');
+    badge.textContent = a.in_use ? `🔴 使用中${a.in_use_by ? " · " + a.in_use_by : ""}` : "🟢 空闲";
+    badge.className = "badge " + (a.in_use ? "busy" : "free");
+    useBtn.textContent = a.in_use ? "我用完了" : "我要用";
     el.querySelector(".note").textContent = a.secret.note || a.note || "";
     el.querySelector(".acts").onclick = (ev) => act(ev.target.dataset.a, a, el);
     box.appendChild(el);
@@ -111,6 +118,15 @@ async function copy(text, btn) {
 
 async function act(what, a, el) {
   const btn = event.target;
+  if (what === "use") {
+    const next = !a.in_use;
+    if (next && a.in_use && !confirm("该账号正被占用,确定接管?")) return;
+    const { error } = await sb.from("accounts")
+      .update({ in_use: next, in_use_by: next ? me : null, in_use_at: new Date().toISOString() })
+      .eq("id", a.id);
+    if (error) return msg("更新状态失败:" + error.message);
+    return load();
+  }
   if (what === "email") copy(a.secret.email, btn);
   if (what === "pw") copy(a.secret.password, btn);
   if (what === "open") a.secret.codeUrl ? window.open(a.secret.codeUrl, "_blank", "noopener") : alert("没有保存验证码链接");
