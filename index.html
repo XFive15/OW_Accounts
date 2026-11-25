@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OW 账号管理</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>🎮 守望先锋账号管理</h1>
+  <div id="bar" hidden>
+    <button id="btnAdd">+ 添加账号</button>
+    <button id="btnLogout" class="ghost">退出</button>
+  </div>
+</header>
+
+<main>
+  <!-- 登录 -->
+  <section id="loginView" class="panel">
+    <h2>登录</h2>
+    <form id="loginForm">
+      <input id="email" type="email" placeholder="邮箱" required>
+      <input id="pass" type="password" placeholder="登录密码" required>
+      <button>登录</button>
+    </form>
+  </section>
+
+  <!-- 主密码 -->
+  <section id="unlockView" class="panel" hidden>
+    <h2>输入共享主密码</h2>
+    <p class="hint">用于在浏览器本地加解密账号密码,不会上传。大家必须使用同一个主密码。</p>
+    <form id="unlockForm">
+      <input id="master" type="password" placeholder="主密码" required>
+      <button>解锁</button>
+    </form>
+  </section>
+
+  <!-- 列表 -->
+  <section id="listView" hidden>
+    <div id="cards"></div>
+  </section>
+  <p id="msg"></p>
+</main>
+
+<dialog id="dlg">
+  <form id="accForm" method="dialog">
+    <h3 id="dlgTitle">账号</h3>
+    <input name="name" placeholder="昵称/备注名" required>
+    <input name="battletag" placeholder="BattleTag,如 Player#1234">
+    <input name="email" placeholder="战网邮箱" required>
+    <input name="password" placeholder="战网密码" required>
+    <input name="codeUrl" placeholder="验证码链接 (如 https://blizzard.owdw.top/...)">
+    <textarea name="note" placeholder="备注(使用中/谁在用等)"></textarea>
+    <div class="row">
+      <button value="ok">保存</button>
+      <button type="button" id="dlgCancel" class="ghost">取消</button>
+    </div>
+  </form>
+</dialog>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
