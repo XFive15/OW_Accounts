@@ -39,7 +39,7 @@ async function boot() {
 }
 let me = "";
 function afterLogin() {
-  sb.auth.getUser().then(({ data }) => (me = data.user?.user_metadata?.name || (data.user?.email || "").split("@")[0]));
+  sb.auth.getUser().then(({ data }) => (me = (data.user?.email || "").split("@")[0]));
   $("bar").hidden = false;
   show("unlockView");
 }
