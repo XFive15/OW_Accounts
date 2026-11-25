@@ -105,7 +105,7 @@ function render() {
     badge.className = "badge " + (a.in_use ? "busy" : "free");
     useBtn.textContent = a.in_use ? "我用完了" : "我要用";
     el.querySelector(".note").textContent = a.secret.note || a.note || "";
-    el.querySelector(".acts").onclick = (ev) => act(ev.target.dataset.a, a, el);
+    el.onclick = (ev) => ev.target.dataset.a && act(ev.target.dataset.a, a, el);
     box.appendChild(el);
   }
 }
@@ -124,7 +124,7 @@ async function act(what, a, el) {
     const { error } = await sb.from("accounts")
       .update({ in_use: next, in_use_by: next ? me : null, in_use_at: new Date().toISOString() })
       .eq("id", a.id);
-    if (error) return msg("更新状态失败:" + error.message);
+    if (error) return alert("更新状态失败:" + error.message);
     return load();
   }
   if (what === "email") copy(a.secret.email, btn);
